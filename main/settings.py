@@ -143,3 +143,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 if DEBUG:
     INSTALLED_APPS += ["django_extensions"]
+    SHELL_PLUS_IMPORTS = [
+        "from classroom.factories import *",
+    ]
