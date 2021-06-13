@@ -5,7 +5,7 @@ APP_LIST ?= main teachers
 help:
 	@echo "Available commands"
 	@echo " - run	 			: runs the development server"
-	@echo " - shell			: runs the development server"
+	@echo " - shellplus			: runs the development shell"
 	@echo " - install			: installs production requirements"
 	@echo " - install-dev			: installs development requirements"
 
@@ -14,6 +14,9 @@ run:
 
 shell:
 	python manage.py shell
+
+shellplus:
+	python manage.py shell_plus
 
 install:
 	python -m pip install -r requirements/base.txt
