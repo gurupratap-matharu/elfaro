@@ -21,7 +21,7 @@ class Teacher(models.Model):
     DIVORCED = "D"
     WIDOWED = "W"
 
-    MARITAL_STATUS = [
+    MARITAL_STATUS_CHOICES = [
         (SINGLE, _("Single")),
         (MARRIED, _("Married")),
         (DIVORCED, _("Divorced")),
@@ -59,7 +59,7 @@ class Teacher(models.Model):
     marital_status = models.CharField(
         verbose_name=_("Marital Status"),
         max_length=2,
-        choices=MARITAL_STATUS,
+        choices=MARITAL_STATUS_CHOICES,
         default=SINGLE,
     )
     phone_regex = RegexValidator(
