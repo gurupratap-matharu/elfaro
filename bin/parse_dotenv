@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+echo "Loading variables from .env file..."
+export $(egrep -v '^#' .env | xargs)
