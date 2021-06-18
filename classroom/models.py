@@ -92,7 +92,7 @@ class Teacher(models.Model):
         ordering = ("-updated",)
 
     def __str__(self) -> str:
-        return ", ".join([self.first_name, self.last_name, self.dni])
+        return ", ".join([self.first_name, self.last_name, str(self.dni)])
 
 
 class Student(models.Model):
