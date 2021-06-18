@@ -53,12 +53,14 @@ class TeacherAdmin(admin.ModelAdmin):
         "first_name",
         "last_name",
         "dni",
+        "gender",
         "date_of_birth",
         "date_of_admission",
         "marital_status",
         "email",
         "phone_number",
         "certified",
+        "active",
     )
     search_fields = (
         "first_name",
