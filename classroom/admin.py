@@ -15,18 +15,18 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "active",
-    )
+    list_display = ("name", "active")
+    list_filter = ("active", "created")
+    search_fields = ("name",)
+    date_hierarchy = "created"
+    ordering = ("name",)
 
 
 @admin.register(SubjectGroup)
 class SubjectGroupAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "year",
-    )
+    list_display = ("name", "year", "active")
+    list_filter = ("active", "created")
+    ordering = ("name",)
 
 
 @admin.register(Student)
@@ -43,11 +43,8 @@ class StudentAdmin(admin.ModelAdmin):
         "phone_number",
         "permission_for_photo",
     )
-    search_fields = (
-        "first_name",
-        "last_name",
-        "dni",
-    )
+    list_filter = ("active", "created")
+    search_fields = ("first_name", "last_name", "dni")
 
 
 @admin.register(Teacher)
@@ -65,8 +62,5 @@ class TeacherAdmin(admin.ModelAdmin):
         "certified",
         "active",
     )
-    search_fields = (
-        "first_name",
-        "last_name",
-        "dni",
-    )
+    list_filter = ("active", "created")
+    search_fields = ("first_name", "last_name", "dni")
