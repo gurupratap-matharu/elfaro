@@ -8,6 +8,7 @@ help:
 	@echo " - shellplus			: runs the development shell"
 	@echo " - install			: installs production requirements"
 	@echo " - install-dev			: installs development requirements"
+	@echo " - setup-test-data		: erases the db and loads mock data"
 
 run:
 	python manage.py runserver
@@ -24,3 +25,6 @@ install:
 install-dev: install
 	python -m pip install -r requirements/dev.txt
 	python -m pip install -r requirements/test.txt
+
+setup-test-data:
+	python manage.py setup_test_data
