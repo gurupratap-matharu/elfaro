@@ -92,6 +92,15 @@ class SubjectFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def groups(self, create, extracted, **kwargs):
+        """
+        A factory-boy hook that adds a subject to respective groups after creation
+        The groups have to be explicitly passed upon creation.
+
+        Ex:
+        SubjectFactory() # will not add to any groups
+        SubjectFactory(groups=(group1, group2)) # will add to mentioned groups
+        """
+
         if not create:
             # Simple build, do nothing.
             return
