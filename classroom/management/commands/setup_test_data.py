@@ -1,9 +1,11 @@
 """A utility script to load test data into the db"""
 
+import random
+
 from django.core.management.base import BaseCommand
 
-from classroom.factories import StudentFactory, SubjectFactory, TeacherFactory
-from classroom.models import Student, Subject, Teacher
+from classroom.factories import StudentFactory, SubjectFactory, SubjectGroupFactory, TeacherFactory
+from classroom.models import Student, Subject, SubjectGroup, Teacher
 
 
 class Command(BaseCommand):
@@ -15,12 +17,21 @@ class Command(BaseCommand):
         self.stdout.write(self.style.HTTP_BAD_REQUEST("Deleting old data..."))
         Teacher.objects.all().delete()
         Student.objects.all().delete()
+        SubjectGroup.objects.all().delete()
         Subject.objects.all().delete()
 
         self.stdout.write(self.style.SUCCESS("Creating new data..."))
+
+        for _ in range(5):
+            SubjectGroupFactory()
+
+        subject_groups = SubjectGroup.objects.all()
+
         for _ in range(20):
             TeacherFactory()
-            SubjectFactory()
+
+            groups = random.choices(subject_groups, k=3)
+            SubjectFactory(groups=groups)
 
         for _ in range(100):
             StudentFactory()
@@ -30,6 +41,7 @@ class Command(BaseCommand):
         Teachers: {Teacher.objects.count()}
         Students: {Student.objects.count()}
         Subjects: {Subject.objects.count()}
+        Subject Groups: {SubjectGroup.objects.count()}
         """
         )
         self.stdout.write(self.style.SUCCESS("All done! 💖💅🏻💫"))
