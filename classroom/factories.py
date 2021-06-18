@@ -108,13 +108,42 @@ class SubjectFactory(factory.django.DjangoModelFactory):
         if extracted:
             # A list of groups were passed in, use them
             for group in extracted:
-                self.group.add(group)
+                self.groups.add(group)
 
     class Meta:
         model = Subject
 
 
+BATCH_CHOICES = [x[0] for x in Course.BATCH_CHOICES]
+CLASSROOM_CHOICES = [x[0] for x in Course.CLASSROOM_CHOICES]
+
+
 class CourseFactory(factory.django.DjangoModelFactory):
+    name = factory.Faker("color_name")
+    batch = factory.Faker("random_element", elements=BATCH_CHOICES)
+    classroom = factory.Faker("random_element", elements=CLASSROOM_CHOICES)
+    division = factory.Faker("random_int", min=1, max=6)
+
+    @factory.post_generation
+    def students(self, create, extracted, **kwargs):
+        """
+        A factory-boy hook that adds students to a course after creation
+        The students have to be explicitly passed upon creation.
+
+        Ex:
+        CourseFactory() # will not add to any students
+        CourseFactory(students=(student1, student2)) # will add those students
+        """
+
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of students were passed in, use them
+            for student in extracted:
+                self.students.add(student)
+
     class Meta:
         model = Course
 
