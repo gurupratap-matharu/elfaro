@@ -178,9 +178,7 @@ class Student(models.Model):
     )
     father_dni = models.PositiveIntegerField(
         verbose_name=_("Father's DNI"),
-        help_text=_(
-            "The national document identification numberr of the applicant's father"
-        ),
+        help_text=_("The national document identification numberr of the applicant's father"),
         null=True,
     )
     father_email = models.EmailField(
@@ -199,9 +197,7 @@ class Student(models.Model):
     )
     mother_dni = models.PositiveIntegerField(
         verbose_name=_("Mother's DNI"),
-        help_text=_(
-            "The national document identification number of the applicant's mother"
-        ),
+        help_text=_("The national document identification number of the applicant's mother"),
         null=True,
     )
     mother_email = models.EmailField(
@@ -222,23 +218,7 @@ class Student(models.Model):
         ordering = ("-updated",)
 
     def __str__(self) -> str:
-        return ", ".join([self.first_name, self.last_name, self.dni])
-
-
-class Subject(models.Model):
-    name = models.CharField(_("Subject name"), max_length=255)
-
-    active = models.BooleanField(default=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = _("Subject")
-        verbose_name_plural = _("Subjects")
-        ordering = ("-updated",)
-
-    def __str__(self) -> str:
-        return f"{self.name}"
+        return ", ".join([self.first_name, self.last_name, str(self.dni)])
 
 
 class SubjectGroup(models.Model):
@@ -247,7 +227,7 @@ class SubjectGroup(models.Model):
         help_text=_("The group to which the subject belongs."),
         max_length=255,
     )
-    group = models.ManyToManyField(Subject)
+
     year = models.PositiveSmallIntegerField(
         verbose_name=_("Year"),
         default=1,
@@ -264,7 +244,25 @@ class SubjectGroup(models.Model):
         ordering = ("-updated",)
 
     def __str__(self) -> str:
-        return ", ".join([{self.name}, {self.year}])
+        return ", ".join([self.name, str(self.year)])
+
+
+class Subject(models.Model):
+    name = models.CharField(
+        verbose_name=_("Subject name"), help_text=_("The name of the subject"), max_length=255
+    )
+    group = models.ManyToManyField(SubjectGroup)
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Subject")
+        verbose_name_plural = _("Subjects")
+        ordering = ("-updated",)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
 
 
 class Course(models.Model):
