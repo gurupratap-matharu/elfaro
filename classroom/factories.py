@@ -90,6 +90,17 @@ class SubjectFactory(factory.django.DjangoModelFactory):
     name = factory.Faker("catch_phrase")
     active = factory.Faker("boolean")
 
+    @factory.post_generation
+    def groups(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for group in extracted:
+                self.group.add(group)
+
     class Meta:
         model = Subject
 
