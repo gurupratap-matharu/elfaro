@@ -22,8 +22,8 @@ CLASSROOM_CHOICES = [x[0] for x in Course.CLASSROOM_CHOICES]
 
 class TeacherFactory(factory.django.DjangoModelFactory):
 
-    first_name = factory.Faker("first_name", locale=LOCALE)
-    last_name = factory.Faker("last_name", locale=LOCALE)
+    first_name = factory.Faker("first_name")
+    last_name = factory.Faker("last_name")
     dni = factory.Faker("random_int", min=10000000, max=99999999)
     date_of_birth = factory.Faker(
         "date_of_birth",
@@ -35,9 +35,9 @@ class TeacherFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(
         lambda obj: "%s@example.com" % (obj.first_name.lower() + obj.last_name.lower())
     )
-    address1 = factory.Faker("address", locale=LOCALE)
-    address2 = factory.Faker("address", locale=LOCALE)
-    city = factory.Faker("city", locale=LOCALE)
+    address1 = factory.Faker("address")
+    address2 = factory.Faker("address")
+    city = factory.Faker("city")
     gender = factory.Faker("random_element", elements=GENDER_CHOICES)
     marital_status = factory.Faker("random_element", elements=MARITAL_STATUS_CHOICES)
     phone_number = factory.LazyAttribute(lambda o: "+54911%s" % o.phone_num)
@@ -52,8 +52,8 @@ class TeacherFactory(factory.django.DjangoModelFactory):
 
 
 class StudentFactory(factory.django.DjangoModelFactory):
-    first_name = factory.Faker("first_name", locale=LOCALE)
-    last_name = factory.Faker("last_name", locale=LOCALE)
+    first_name = factory.Faker("first_name")
+    last_name = factory.Faker("last_name")
     dni = factory.Faker("random_int", min=10000000, max=99999999)
     date_of_birth = factory.Faker(
         "date_of_birth",
@@ -65,22 +65,22 @@ class StudentFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(
         lambda obj: "%s@example.com" % (obj.first_name.lower() + obj.last_name.lower())
     )
-    address1 = factory.Faker("address", locale=LOCALE)
-    address2 = factory.Faker("address", locale=LOCALE)
-    city = factory.Faker("city", locale=LOCALE)
+    address1 = factory.Faker("address")
+    address2 = factory.Faker("address")
+    city = factory.Faker("city")
     gender = factory.Faker("random_element", elements=GENDER_CHOICES)
     marital_status = factory.Faker("random_element", elements=MARITAL_STATUS_CHOICES)
     phone_number = factory.LazyAttribute(lambda o: "+54911%s" % o.phone_num)
     permission_for_photo = factory.Faker("boolean")
-    father_first_name = factory.Faker("first_name_male", locale=LOCALE)
-    father_last_name = factory.Faker("last_name_male", locale=LOCALE)
+    father_first_name = factory.Faker("first_name_male")
+    father_last_name = factory.Faker("last_name_male")
     father_dni = factory.Faker("random_int", min=10000000, max=99999999)
     father_email = factory.LazyAttribute(
         lambda obj: "%s@example.com"
         % (obj.father_first_name.lower() + obj.father_last_name.lower())
     )
-    mother_first_name = factory.Faker("first_name_female", locale=LOCALE)
-    mother_last_name = factory.Faker("last_name_female", locale=LOCALE)
+    mother_first_name = factory.Faker("first_name_female")
+    mother_last_name = factory.Faker("last_name_female")
     mother_dni = factory.Faker("random_int", min=10000000, max=99999999)
     mother_email = factory.LazyAttribute(
         lambda obj: "%s@example.com"
@@ -96,7 +96,7 @@ class StudentFactory(factory.django.DjangoModelFactory):
 
 
 class SubjectFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker("catch_phrase", locale=LOCALE)
+    name = factory.Faker("catch_phrase")
     active = factory.Faker("boolean")
 
     @factory.post_generation
@@ -133,7 +133,7 @@ class SubjectGroupFactory(factory.django.DjangoModelFactory):
 
 
 class CourseFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker("color_name", locale=LOCALE)
+    name = factory.Faker("color_name")
     batch = factory.Faker("random_element", elements=BATCH_CHOICES)
     classroom = factory.Faker("random_element", elements=CLASSROOM_CHOICES)
     division = factory.Faker("random_int", min=1, max=6)
