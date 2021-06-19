@@ -1,20 +1,29 @@
+"""
+Factories for all the models of the classroom app. They heavily use factory-boy
+and the excellent faker module under the hood to generate authentic fake data.
+
+Meant to be used in 
+    - unit tests
+    - management commands
+"""
+
 import factory
 from django.utils import timezone
-from faker import Faker
 
 from .models import Course, Student, Subject, SubjectGroup, Teacher
 
-fake = Faker()
-
+LOCALE = "es"
 
 GENDER_CHOICES = [x[0] for x in Teacher.GENDER_CHOICES]
 MARITAL_STATUS_CHOICES = [x[0] for x in Teacher.MARITAL_STATUS_CHOICES]
+BATCH_CHOICES = [x[0] for x in Course.BATCH_CHOICES]
+CLASSROOM_CHOICES = [x[0] for x in Course.CLASSROOM_CHOICES]
 
 
 class TeacherFactory(factory.django.DjangoModelFactory):
 
-    first_name = factory.Faker("first_name")
-    last_name = factory.Faker("last_name")
+    first_name = factory.Faker("first_name", locale=LOCALE)
+    last_name = factory.Faker("last_name", locale=LOCALE)
     dni = factory.Faker("random_int", min=10000000, max=99999999)
     date_of_birth = factory.Faker(
         "date_of_birth",
@@ -26,9 +35,9 @@ class TeacherFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(
         lambda obj: "%s@example.com" % (obj.first_name.lower() + obj.last_name.lower())
     )
-    address1 = factory.Faker("address")
-    address2 = factory.Faker("address")
-    city = factory.Faker("city")
+    address1 = factory.Faker("address", locale=LOCALE)
+    address2 = factory.Faker("address", locale=LOCALE)
+    city = factory.Faker("city", locale=LOCALE)
     gender = factory.Faker("random_element", elements=GENDER_CHOICES)
     marital_status = factory.Faker("random_element", elements=MARITAL_STATUS_CHOICES)
     phone_number = factory.LazyAttribute(lambda o: "+54911%s" % o.phone_num)
@@ -43,8 +52,8 @@ class TeacherFactory(factory.django.DjangoModelFactory):
 
 
 class StudentFactory(factory.django.DjangoModelFactory):
-    first_name = factory.Faker("first_name")
-    last_name = factory.Faker("last_name")
+    first_name = factory.Faker("first_name", locale=LOCALE)
+    last_name = factory.Faker("last_name", locale=LOCALE)
     dni = factory.Faker("random_int", min=10000000, max=99999999)
     date_of_birth = factory.Faker(
         "date_of_birth",
@@ -56,22 +65,22 @@ class StudentFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(
         lambda obj: "%s@example.com" % (obj.first_name.lower() + obj.last_name.lower())
     )
-    address1 = factory.Faker("address")
-    address2 = factory.Faker("address")
-    city = factory.Faker("city")
+    address1 = factory.Faker("address", locale=LOCALE)
+    address2 = factory.Faker("address", locale=LOCALE)
+    city = factory.Faker("city", locale=LOCALE)
     gender = factory.Faker("random_element", elements=GENDER_CHOICES)
     marital_status = factory.Faker("random_element", elements=MARITAL_STATUS_CHOICES)
     phone_number = factory.LazyAttribute(lambda o: "+54911%s" % o.phone_num)
     permission_for_photo = factory.Faker("boolean")
-    father_first_name = factory.Faker("first_name")
-    father_last_name = factory.Faker("last_name")
+    father_first_name = factory.Faker("first_name_male", locale=LOCALE)
+    father_last_name = factory.Faker("last_name_male", locale=LOCALE)
     father_dni = factory.Faker("random_int", min=10000000, max=99999999)
     father_email = factory.LazyAttribute(
         lambda obj: "%s@example.com"
         % (obj.father_first_name.lower() + obj.father_last_name.lower())
     )
-    mother_first_name = factory.Faker("first_name")
-    mother_last_name = factory.Faker("last_name")
+    mother_first_name = factory.Faker("first_name_female", locale=LOCALE)
+    mother_last_name = factory.Faker("last_name_female", locale=LOCALE)
     mother_dni = factory.Faker("random_int", min=10000000, max=99999999)
     mother_email = factory.LazyAttribute(
         lambda obj: "%s@example.com"
@@ -87,7 +96,7 @@ class StudentFactory(factory.django.DjangoModelFactory):
 
 
 class SubjectFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker("catch_phrase")
+    name = factory.Faker("catch_phrase", locale=LOCALE)
     active = factory.Faker("boolean")
 
     @factory.post_generation
@@ -114,15 +123,22 @@ class SubjectFactory(factory.django.DjangoModelFactory):
         model = Subject
 
 
-BATCH_CHOICES = [x[0] for x in Course.BATCH_CHOICES]
-CLASSROOM_CHOICES = [x[0] for x in Course.CLASSROOM_CHOICES]
+class SubjectGroupFactory(factory.django.DjangoModelFactory):
+    name = factory.Sequence(lambda n: "Group #%s" % n)
+    year = factory.Faker("random_int", min=1, max=6)
+    active = factory.Faker("boolean")
+
+    class Meta:
+        model = SubjectGroup
 
 
 class CourseFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker("color_name")
+    name = factory.Faker("color_name", locale=LOCALE)
     batch = factory.Faker("random_element", elements=BATCH_CHOICES)
     classroom = factory.Faker("random_element", elements=CLASSROOM_CHOICES)
     division = factory.Faker("random_int", min=1, max=6)
+    subject_group = factory.SubFactory(SubjectGroupFactory)
+    active = factory.Faker("boolean")
 
     @factory.post_generation
     def students(self, create, extracted, **kwargs):
@@ -144,14 +160,25 @@ class CourseFactory(factory.django.DjangoModelFactory):
             for student in extracted:
                 self.students.add(student)
 
+    @factory.post_generation
+    def teachers(self, create, extracted, **kwargs):
+        """
+        A factory-boy hook that adds teachers to a course after creation
+        The teachers have to be explicitly passed upon creation.
+
+        Ex:
+        CourseFactory() # will not add to any teachers
+        CourseFactory(teachers=(teacher1, teacher2)) # will add those teachers
+        """
+
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of students were passed in, use them
+            for teacher in extracted:
+                self.teachers.add(teacher)
+
     class Meta:
         model = Course
-
-
-class SubjectGroupFactory(factory.django.DjangoModelFactory):
-    name = factory.Sequence(lambda n: "Group #%s" % n)
-    year = factory.Faker("random_int", min=1, max=6)
-    active = factory.Faker("boolean")
-
-    class Meta:
-        model = SubjectGroup
