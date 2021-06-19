@@ -337,7 +337,7 @@ class Course(models.Model):
     )
     students = models.ManyToManyField(Student)
     teachers = models.ManyToManyField(Teacher)
-    subject_group = models.OneToOneField(
+    subject_group = models.ForeignKey(
         SubjectGroup, on_delete=models.DO_NOTHING, related_name="Course", null=True
     )
     active = models.BooleanField(default=True)
