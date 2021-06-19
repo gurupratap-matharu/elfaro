@@ -5,12 +5,11 @@ from .models import Course, Student, Subject, SubjectGroup, Teacher
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "batch",
-        "classroom",
-        "division",
-    )
+    list_display = ("name", "batch", "classroom", "division", "active")
+    list_filter = ("active", "created")
+    search_fields = ("name",)
+    date_hierarchy = "created"
+    ordering = ("name",)
 
 
 @admin.register(Subject)
