@@ -23,28 +23,23 @@ class Command(BaseCommand):
         self.stdout.write(self.style.HTTP_BAD_REQUEST("Deleting old data..."))
         Teacher.objects.all().delete()
         Student.objects.all().delete()
-        SubjectGroup.objects.all().delete()
         Subject.objects.all().delete()
         Course.objects.all().delete()
+        SubjectGroup.objects.all().delete()
 
         self.stdout.write(self.style.SUCCESS("Creating new data..."))
 
-        for _ in range(5):
-            SubjectGroupFactory()
-
-        subject_groups = SubjectGroup.objects.all()
-
-        for _ in range(20):
-            TeacherFactory()
-
-            groups = random.choices(subject_groups, k=3)
-            SubjectFactory(groups=groups)
-
-        for _ in range(100):
-            StudentFactory()
+        teachers = TeacherFactory.create_batch(size=20)
+        students = StudentFactory.create_batch(size=100)
+        subject_groups = SubjectGroupFactory.create_batch(size=5)
 
         for _ in range(20):
-            CourseFactory()
+            SubjectFactory(groups=random.choices(subject_groups, k=3))
+            CourseFactory(
+                students=random.choices(students, k=10),
+                teachers=random.choices(teachers, k=3),
+                subject_group=random.choice(subject_groups),
+            )
 
         print(
             f"""
