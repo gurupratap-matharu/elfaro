@@ -4,8 +4,14 @@ import random
 
 from django.core.management.base import BaseCommand
 
-from classroom.factories import StudentFactory, SubjectFactory, SubjectGroupFactory, TeacherFactory
-from classroom.models import Student, Subject, SubjectGroup, Teacher
+from classroom.factories import (
+    CourseFactory,
+    StudentFactory,
+    SubjectFactory,
+    SubjectGroupFactory,
+    TeacherFactory,
+)
+from classroom.models import Course, Student, Subject, SubjectGroup, Teacher
 
 
 class Command(BaseCommand):
@@ -19,6 +25,7 @@ class Command(BaseCommand):
         Student.objects.all().delete()
         SubjectGroup.objects.all().delete()
         Subject.objects.all().delete()
+        Course.objects.all().delete()
 
         self.stdout.write(self.style.SUCCESS("Creating new data..."))
 
@@ -36,12 +43,16 @@ class Command(BaseCommand):
         for _ in range(100):
             StudentFactory()
 
+        for _ in range(20):
+            CourseFactory()
+
         print(
             f"""
         Teachers: {Teacher.objects.count()}
         Students: {Student.objects.count()}
         Subjects: {Subject.objects.count()}
         Subject Groups: {SubjectGroup.objects.count()}
+        Courses: {Course.objects.count()}
         """
         )
         self.stdout.write(self.style.SUCCESS("All done! 💖💅🏻💫"))

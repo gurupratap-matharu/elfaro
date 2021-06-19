@@ -222,6 +222,7 @@ class Student(models.Model):
 
 
 class SubjectGroup(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         verbose_name=_("Subject Group"),
         help_text=_("The group to which the subject belongs."),
@@ -248,10 +249,11 @@ class SubjectGroup(models.Model):
 
 
 class Subject(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         verbose_name=_("Subject name"), help_text=_("The name of the subject"), max_length=255
     )
-    group = models.ManyToManyField(SubjectGroup)
+    groups = models.ManyToManyField(SubjectGroup)
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -311,6 +313,8 @@ class Course(models.Model):
         (LABORATORIOTECH, "Laboratorio TECH"),
         (LABORATORIOINF, "Laboratorio De Informatica"),
     )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("Course Name"), max_length=60)
     batch = models.CharField(
         verbose_name=_("Batch"),
@@ -331,8 +335,19 @@ class Course(models.Model):
         default=1,
         validators=[MinValueValidator(1), MaxValueValidator(6)],
     )
-    student = models.ManyToManyField(Student)
-    teacher = models.ManyToManyField(Teacher)
+    students = models.ManyToManyField(Student)
+    teachers = models.ManyToManyField(Teacher)
     subject_group = models.OneToOneField(
         SubjectGroup, on_delete=models.DO_NOTHING, related_name="Course", null=True
     )
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Course")
+        verbose_name_plural = _("Courses")
+        ordering = ("-updated",)
+
+    def __str__(self) -> str:
+        return f"{self.name}, {self.batch}, {self.classroom}"
