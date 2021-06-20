@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "crispy_forms",
     # local
     "classroom.apps.ClassroomConfig",
     "users.apps.UsersConfig",
@@ -175,7 +176,6 @@ if not DEBUG:
     EMAIL_HOST = "smtp.gmail.com"
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
-
 
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
