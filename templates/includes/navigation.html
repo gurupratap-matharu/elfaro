@@ -6,8 +6,12 @@
         <span class="fs-4">El Faro 🚨</span>
     </a>
     <ul class="nav nav-pills">
-        <li class="nav-item"><a href="#" class="nav-link">Courses</a></li>
+        <li class="nav-item"><a href="#" class="nav-link me-2">Courses</a></li>
+        {% if user.is_authenticated %}
+        <button type="button" class="btn btn-outline-primary">Logout</button>
+        {% else %}
         <button type="button" class="btn btn-outline-primary me-2">Login</button>
         <button type="button" class="btn btn-primary">Sign-up</button>
+        {% endif %}
     </ul>
 </header>
