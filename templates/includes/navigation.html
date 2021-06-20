@@ -8,10 +8,10 @@
     <ul class="nav nav-pills">
         <li class="nav-item"><a href="#" class="nav-link me-2">Courses</a></li>
         {% if user.is_authenticated %}
-        <button type="button" class="btn btn-outline-primary">Logout</button>
+        <a href="{% url 'account_logout' %}" class="btn btn-outline-primary">Logout</a>
         {% else %}
-        <button type="button" class="btn btn-outline-primary me-2">Login</button>
-        <button type="button" class="btn btn-primary">Sign-up</button>
+        <a href="{% url 'account_login' %}" type="button" class="btn btn-outline-primary me-2">Login</a>
+        <a href="{% url 'account_signup' %}" type="button" class="btn btn-primary">Sign-up</a>
         {% endif %}
     </ul>
 </header>
