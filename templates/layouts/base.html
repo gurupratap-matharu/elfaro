@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 
@@ -11,6 +12,7 @@
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
     <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block style %}{% endblock style %}
 
     <title>{% block title %}El Faro{% endblock title %}</title>
