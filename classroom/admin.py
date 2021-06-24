@@ -41,9 +41,11 @@ class StudentAdmin(admin.ModelAdmin):
         "email",
         "phone_number",
         "permission_for_photo",
+        "user",
     )
     list_filter = ("active", "created")
     search_fields = ("first_name", "last_name", "dni")
+    raw_id_fields = ("user",)
 
 
 @admin.register(Teacher)
@@ -60,6 +62,8 @@ class TeacherAdmin(admin.ModelAdmin):
         "phone_number",
         "certified",
         "active",
+        "user",
     )
     list_filter = ("active", "created")
     search_fields = ("first_name", "last_name", "dni")
+    raw_id_fields = ("user",)
