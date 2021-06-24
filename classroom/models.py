@@ -86,8 +86,6 @@ class Person(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
     class Meta:
         abstract = True
 
@@ -99,6 +97,9 @@ class Teacher(Person):
         verbose_name=_("Certified"),
         help_text=_("Are you certified as a teacher?"),
         default=False,
+    )
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="teacher"
     )
 
     class Meta:
@@ -154,6 +155,9 @@ class Student(Person):
             "We might send email to this address for permissions or information regarding the student's activities"
         ),
         blank=True,
+    )
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="student"
     )
 
     class Meta:
