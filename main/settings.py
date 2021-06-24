@@ -73,6 +73,10 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_REDIRECT = "classroom:classroom_home"
 LOGIN_REDIRECT_URL = "classroom:classroom_home"
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
 
 AUTH_USER_MODEL = "users.CustomUser"
 
