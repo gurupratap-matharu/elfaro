@@ -10,6 +10,8 @@ Meant to be used in
 import factory
 from django.utils import timezone
 
+from users.factories import UserFactory
+
 from .models import Course, Student, Subject, SubjectGroup, Teacher
 
 LOCALE = "es"
@@ -43,6 +45,7 @@ class TeacherFactory(factory.django.DjangoModelFactory):
     phone_number = factory.LazyAttribute(lambda o: "+54911%s" % o.phone_num)
     certified = factory.Faker("boolean")
     active = factory.Faker("boolean")
+    user = factory.SubFactory(UserFactory)
 
     class Meta:
         model = Teacher
@@ -87,6 +90,7 @@ class StudentFactory(factory.django.DjangoModelFactory):
         % (obj.mother_first_name.lower() + obj.mother_last_name.lower())
     )
     active = factory.Faker("boolean")
+    user = factory.SubFactory(UserFactory)
 
     class Meta:
         model = Student
