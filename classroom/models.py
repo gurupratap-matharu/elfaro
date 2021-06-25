@@ -1,10 +1,10 @@
 """Database models for the elfaro platform"""
-
 import uuid
 
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 
@@ -285,9 +285,10 @@ class Course(models.Model):
     )
     students = models.ManyToManyField(Student)
     teachers = models.ManyToManyField(Teacher)
-    subject_group = models.ForeignKey(
-        SubjectGroup, on_delete=models.DO_NOTHING, related_name="Course", null=True
+    subject = models.ForeignKey(
+        Subject, on_delete=models.DO_NOTHING, related_name="Course", null=True
     )
+
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -299,3 +300,6 @@ class Course(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}, {self.batch}, {self.classroom}"
+
+    def get_absolute_url(self):
+        return reverse("classroom:course_detail", args=[str(self.id)])
