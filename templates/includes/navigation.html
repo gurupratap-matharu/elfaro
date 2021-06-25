@@ -6,7 +6,7 @@
         <span class="fs-4">El Faro 🚨</span>
     </a>
     <ul class="nav nav-pills">
-        <li class="nav-item"><a href="#" class="nav-link me-2">Courses</a></li>
+        <li class="nav-item"><a href="{% url 'classroom:course_list' %}" class="nav-link me-2">Courses</a></li>
         {% if user.is_authenticated %}
         <a href="{% url 'account_logout' %}" class="btn btn-outline-primary">Logout</a>
         {% else %}
