@@ -141,7 +141,7 @@ class CourseFactory(factory.django.DjangoModelFactory):
     batch = factory.Faker("random_element", elements=BATCH_CHOICES)
     classroom = factory.Faker("random_element", elements=CLASSROOM_CHOICES)
     division = factory.Faker("random_int", min=1, max=6)
-    subject_group = factory.SubFactory(SubjectGroupFactory)
+    subject = factory.SubFactory(SubjectFactory)
     active = factory.Faker("boolean")
 
     @factory.post_generation
