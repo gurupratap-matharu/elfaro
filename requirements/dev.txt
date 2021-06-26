@@ -3,3 +3,4 @@ black==21.5b1
 django-extensions
 factory-boy
 ipython
+coverage
