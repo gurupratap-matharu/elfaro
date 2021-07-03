@@ -1,6 +1,7 @@
+-r base.txt
+
 pylint==2.8.2
 black==21.5b1
 django-extensions
 factory-boy
 ipython
-coverage
